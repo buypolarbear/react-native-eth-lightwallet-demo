@@ -1,11 +1,7 @@
 import './../shim.js'
 import React, { Component } from 'react'
 import { Platform, StyleSheet, Text, View, Button, TextInput, AsyncStorage } from 'react-native'
-// import crypto from 'crypto'
-// import bip39 from 'react-native-bip39'
-// import Mnemonic from 'bitcore-mnemonic'
 import * as lightwallet from 'eth-lightwallet'
-// import * as util from 'ethereumjs-util'
 
 export default class App extends Component {
   constructor(props) {
@@ -108,7 +104,7 @@ export default class App extends Component {
     lightwallet.keystore.createVault({
       password,
       seedPhrase,
-      hdPathString: "m/44'/60'/0'/0"
+      hdPathString: "m/44'/60'/0'/0/0"
     }, (error, ks) => {
       if (error) {
         this.setState({ error })
