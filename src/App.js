@@ -1,17 +1,16 @@
 import './../shim.js'
 import React, { Component } from 'react'
 import { Platform, StyleSheet, Text, View, Button, TextInput, AsyncStorage } from 'react-native'
-import crypto from 'crypto'
-import bip39 from 'react-native-bip39'
-import Mnemonic from 'bitcore-mnemonic'
+// import crypto from 'crypto'
+// import bip39 from 'react-native-bip39'
+// import Mnemonic from 'bitcore-mnemonic'
 import * as lightwallet from 'eth-lightwallet'
-import * as util from 'ethereumjs-util'
+// import * as util from 'ethereumjs-util'
 
 export default class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      password: "Simple Secret Wallet Unlock Password Which Needs To Be Stored Here",
       error: null,
       keystore: false,
       mnemonic: null,
@@ -21,6 +20,7 @@ export default class App extends Component {
       restoreMnemonic: ''
     }
 
+    this.password = "Simple Secret Wallet Unlock Password Which Needs To Be Stored Here"
     this.keystore = null
   }
 
@@ -75,16 +75,13 @@ export default class App extends Component {
   _generateNewWallet = () => {
     this.setState({ generating: true })
 
-    bip39.generateMnemonic()
-      .then(mnemonic => {
-        this.setState({ mnemonic })
-        setTimeout(() => {
-          this._generateWallet(mnemonic)
-        }, 500)
-      })
-      .catch(error => {
-        this.setState({ error })
-      })
+    const mnemonic = lightwallet.keystore.generateRandomSeed('insert random entropy generation')
+
+    this.setState({ mnemonic })
+
+    setTimeout(() => {
+      this._generateWallet(mnemonic)
+    }, 500)
   }
 
   _generateFromMnemonic = () => {
@@ -95,7 +92,7 @@ export default class App extends Component {
       restoreMnemonic: ''
     })
 
-    if (restoreMnemonic.split(' ').length != 12 || !Mnemonic.isValid(restoreMnemonic)) {
+    if (restoreMnemonic.split(' ').length != 12 || !lightwallet.keystore.isSeedValid(restoreMnemonic)) {
       this.setState({ generating: false })
       return
     }
@@ -105,13 +102,13 @@ export default class App extends Component {
     }, 500)
   }
 
-  _generateWallet = (seedPhrase, hdPathString = "m/44'/60'/0'/0") => {
-    const { password } = this.state
+  _generateWallet = (seedPhrase) => {
+    const { password } = this
 
     lightwallet.keystore.createVault({
       password,
       seedPhrase,
-      hdPathString
+      hdPathString: "m/44'/60'/0'/0"
     }, (error, ks) => {
       if (error) {
         this.setState({ error })
