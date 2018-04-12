@@ -89,7 +89,10 @@ export default class App extends Component {
     })
 
     if (restoreMnemonic.split(' ').length != 12 || !lightwallet.keystore.isSeedValid(restoreMnemonic)) {
-      this.setState({ generating: false })
+      this.setState({
+        generating: false,
+        restoring: false
+      })
       return
     }
 
