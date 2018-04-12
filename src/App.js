@@ -32,7 +32,10 @@ export default class App extends Component {
     try {
       await AsyncStorage.setItem('WalletKeystore', this.keystore.serialize())
       this._loadKeystore()
-      this.setState({ keystore: true })
+      this.setState({
+        keystore: true,
+        restoring: false
+      })
     } catch (error) {
       // Error saving data
       this.setState({ error })
@@ -75,7 +78,9 @@ export default class App extends Component {
     bip39.generateMnemonic()
       .then(mnemonic => {
         this.setState({ mnemonic })
-        this._generateWallet(mnemonic)
+        setTimeout(() => {
+          this._generateWallet(mnemonic)
+        }, 500)
       })
       .catch(error => {
         this.setState({ error })
@@ -87,7 +92,6 @@ export default class App extends Component {
 
     this.setState({
       generating: true,
-      restoring: false,
       restoreMnemonic: ''
     })
 
@@ -96,7 +100,9 @@ export default class App extends Component {
       return
     }
 
-    this._generateWallet(restoreMnemonic)
+    setTimeout(() => {
+      this._generateWallet(restoreMnemonic)
+    }, 500)
   }
 
   _generateWallet = (seedPhrase, hdPathString = "m/44'/60'/0'/0") => {
@@ -164,7 +170,7 @@ export default class App extends Component {
               </View>
               :
               <Text style={styles.text}>
-                Generating wallet...
+                {(this.state.restoring) ? 'Restoring' : 'Generating' } wallet...
               </Text>
             }
           </View>
