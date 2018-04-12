@@ -11,7 +11,7 @@ Node package manager.
 
 ```
 npm install -g react-native-cli
-npm install -g rn-nodify
+npm install -g rn-nodeify
 npm install -g react-devtools
 ```
 ...and iOS and Android simulators already configured.
