@@ -6,7 +6,7 @@
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
     "postinstall": "rn-nodeify --install --hack",
-    "app:start": "node node_modules/react-native/local-cli/cli.js start",
+    "app": "node node_modules/react-native/local-cli/cli.js start",
     "app:eject": "rm -rf ./android && rm -rf ./ios && react-native eject",
 		"app:link": "react-native link",
 		"ios": "react-native run-ios",
